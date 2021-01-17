@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title</title>
+    <environment include="Development">
+        <link href="~/libs/bs/css/bootstrap.css" rel="stylesheet" />
+        <script src="~/libs/popper/umd/popper.js"></script>
+        <script src="~/libs/jquery/jquery.js"></script>
+
+        <style>
+            body {
+                padding-top: 80px;
+            }
+        </style>
+    </environment>
+    @RenderSection("styles", false)
+
+</head>
+<body>
+
+    <nav class="navbar navbar-info navbar-expand-md bg-warning fixed-top px-4">
+        <p>
+            <img src="~/images/employee_ajax_gif.jpg" class="rounded-circle" width="60" />
+            
+        </p>
+        <a asp-controller="Home" asp-action="Index" class="navbar-brand">Online Job Site</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nbar" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="nbar">
+            <ul class="navbar-nav nav">
+                <li class="nav-item"><a asp-controller="Home" asp-action="Index" class="nav-link">Home</a></li>
+                <li class="nav-item"><a asp-controller="OnlineJobSite" asp-action="Index" class="nav-link">Online Job Site</a></li>
+                <li class="nav-item"><a asp-controller="JobAdvertisement" asp-action="Index" class="nav-link">Job Advertisement</a></li>
+                <li class="nav-item"><a asp-controller="JobApplicant" asp-action="Index" class="nav-link">Job Applicant</a></li>
+                <li class="nav-item"><a asp-controller="JobSite" asp-action="Index" class="nav-link">3 in 1 View</a></li>
+                <li class="nav-item"><a asp-controller="Advertisement" asp-action="Index" class="nav-link">Applied Applicant in Advertisement</a></li>
+            </ul>
+            <ul class="navbar-nav nav ml-auto">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item"><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+                }
+
+            </ul>
+        </div>
+        
+    </nav>
+    <section class="bg-image" style="background-image: url('../../images/job3.jpg'); lighting-color:aqua;">
+
+        <div class="container-fluid" style="min-height:450px;">
+            @RenderBody()
+        </div>
+        <footer class="page-footer">
+            <div class="body-wrap" style="padding-bottom:15px;">ID 1255708</div>
+        </footer>
+        </section>
+        <environment include="Development">
+
+            <script src="~/libs/bs/js/bootstrap.js"></script>
+        </environment>
+        @RenderSection("scripts", false)
+</body>
+</html>

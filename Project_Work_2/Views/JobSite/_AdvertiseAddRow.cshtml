@@ -1,0 +1,19 @@
+﻿@model Project_Work_2.Models.JobAdvertisement
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<tr>
+    <td>
+
+        <input asp-for="JobTypeName" class="form-control form-control-sm" />
+        <span asp-validation-for="JobTypeName" class="text-danger"></span>
+    </td>
+
+    <td>
+        <input type="text" asp-for="Responsibility" class="form-control form-control-sm" />
+        <span class="text-danger" asp-validation-for="Responsibility"></span>
+    </td>
+    <td style="width:90px">
+        <button type="button" class="btn btn-primary btn-sm add"><span class="fa fa-plus"></span> Add</button>
+    </td>
+</tr>

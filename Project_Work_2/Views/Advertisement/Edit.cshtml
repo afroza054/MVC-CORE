@@ -1,0 +1,187 @@
+﻿@model JobAdvertisement
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="card bg-light">
+    <div class="card-header">
+        <h4 class="card-title">Edit Advertisement Applicant</h4>
+    </div>
+    <div class="card-body">
+        @if (ViewBag.PostBack != null)
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Success!</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p>Data Save Successfully.</p>
+            </div>
+        }
+        <form id="formCourse" name="formCourse">
+            <h5 class="card-subtitle">Advertise Info</h5>
+            <div class="card-text">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="JobAdvertisementId" />
+                <div class="form-group row">
+                    <label asp-for="OnlineJobSiteId" class="col-form-label col-2 text-right"></label>
+                    <div class="col-4">
+                        <select class="form-control" asp-for="OnlineJobSiteId" asp-items="@(new SelectList(ViewBag.JobSites,"OnlineJobSiteId", "OnlineJobSiteName"))">
+                            <option value="">Select</option>
+                        </select>
+                        <span asp-validation-for="OnlineJobSiteId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="JobTypeName" class="col-form-label col-2 text-right"></label>
+                    <div class="col-4">
+                        <input asp-for="JobTypeName" class="form-control" />
+                        <span asp-validation-for="JobTypeName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="Responsibility" class="col-form-label col-2 text-right"></label>
+                    <div class="col-4">
+                        <input asp-for="Responsibility" class="form-control" />
+                        <span asp-validation-for="Responsibility" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <h5 class="card-subtitle">Applicants</h5>
+            <div class="card-text">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Applicant Name</th>
+
+                            <th>Contact Email</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var applicants in Model.JobApplicants)
+                        {
+                            @await Html.PartialAsync("_ApplicantEditRow", applicants)
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </form>
+        <div class="d-flex justify-content-end">
+            <input type="button" value="Update data" class="btn btn-primary" id="save" />
+        </div>
+    </div>
+    <div class="card-footer">
+
+        <div class="d-flex">
+            <a class="card-link" asp-action="Index"><span class="fa fa-long-arrow-left"></span> Back to list</a>
+            <a class="card-link ml-auto" asp-action="Index">Assign  Advertisement<span class="fa fa-long-arrow-right"></span></a>
+        </div>
+
+    </div>
+</div>
+
+
+@section styles {
+
+    <environment include="Development">
+
+        <link href="~/libs/font/css/font-awesome.css" rel="stylesheet" />
+
+        <link href="~/libs/gijgo/combined/css/gijgo.css" rel="stylesheet" />
+
+        <link href="~/libs/Toast/toast.min.css" rel="stylesheet" />
+    </environment>
+}
+@section scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/libs/Toast/toast.min.js"></script>
+
+    <script src="~/libs/gijgo/combined/js/gijgo.js"></script>
+    <script>
+        $(document).ready(() => {
+            var data = {
+                JobApplicants: []
+            };
+            //$('input.date').each(function () {
+            //    $(this).datepicker({
+            //        uiLibrary: 'bootstrap4',
+            //        format: 'yyyy-mm-dd'
+            //    });
+            //});
+            $("button.student-del").click(function () {
+                $(this).closest("tr").remove();
+            });
+            $("#save").click(() => {
+                console.log('ok');
+                data.JobAdvertisementId = $("#JobAdvertisementId").val();
+                data.OnlineJobSiteId = $("#OnlineJobSiteId").val();
+                data.JobTypeName = $("#JobTypeName").val();
+                data.Responsibility = $("#Responsibility").val();
+                var ids = $("input[name='JobApplicantId']");
+                var names = $("input[name='JobApplicantName']");
+                
+                var emails = $("input[name='ContactEmail']");
+                $.each(ids, function (i, el) {
+                    data.JobApplicants.push({
+                        JobApplicantId: $(el).val(),
+                        JobApplicantName: $(names[i]).val(),
+                        
+                        ContactEmail: $(emails[i]).val()
+                    });
+                });
+                console.log(data);
+                $.ajax({
+                    type: "POST",
+                    url: "/Advertisement/SaveJobAdvertisement",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify(data)
+                }).done(r => {
+                    console.log(r);
+                    if (r.success == true) {
+                        $.toast({
+                            title: 'Success!',
+                            subtitle: 'Saved',
+                            content: 'Data saved successfully.',
+                            type: 'success',
+                            delay: 3000,
+                            dismissible: true,
+
+                            // is stackable?
+                            stackable: true,
+                            position: 'top-right'
+
+                        });
+                    }
+                    else {
+                        $.toast({
+                            title: 'Error!',
+                            subtitle: 'Failed.',
+                            content: 'Data update failed.',
+                            type: 'warning',
+                            delay: 3000,
+                            dismissible: true,
+
+                            // is stackable?
+                            stackable: true,
+                            position: 'top-center bottom-right'
+
+                        });
+                    }
+                }).fail(err => {
+                    console.log(err);
+                });
+            });
+        });
+    </script>
+
+}
+

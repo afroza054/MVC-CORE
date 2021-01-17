@@ -1,0 +1,112 @@
+﻿@model IEnumerable<JobAdvertisement>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">Advertisement & Applicant</h4>
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-end mb-1">
+             @Html.ActionLink("Create Advertise & Applicant", "Create", "Advertisement", new { }, new { @class = "btn btn-primary" })
+
+        </div>
+
+    </div>
+</div>
+
+<div class="card-text">
+    <table class="table table-bordered table-warning">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Job Type Name</th>
+                <th>Responsibility</th>
+                <th>Job Site Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="width:50px">
+                        <button type="button" class="btn btn-sm course" data-course-pk="@item.JobAdvertisementId"><span class="fa fa-plus-square"></span></button>
+                    </td>
+                    <td>@item.JobTypeName</td>
+
+                    <td>@item.Responsibility</td>
+                    <td>@item.OnlineJobSite.OnlineJobSiteName</td>
+
+                    <td>
+                        <a asp-action="Edit" asp-controller="Advertisement" asp-route-id="@item.JobAdvertisementId" class="btn btn-success btn-sm rounded-circle"><span class="fa fa-pencil"></span></a>
+
+                        <a asp-action="Delete" asp-controller="Advertisement" asp-route-id="@item.JobAdvertisementId" class="btn btn-danger btn-sm rounded-circle"><span class="fa fa-trash"></span></a>
+                    </td>
+                </tr>
+                <tr style="display:none;" id="course-@item.JobAdvertisementId" class="child-row">
+                    <td>&nbsp;</td>
+                    <td colspan="4">
+                        <table class="table table-bordered table-success">
+                            <thead class="thead-light">
+                                <tr>
+
+                                    <th>Applicant Name</th>
+                                    <th>Contact Email</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var child in item.JobApplicants)
+                                {
+                                    <tr>
+
+                                        <td>@child.JobApplicantName</td>
+                                        <td><a href="mailto:@child.ContactEmail">@child.ContactEmail</a></td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div class="card-footer">
+    <div class="d-flex">
+        <a class="card-link" asp-action="Index"><span class="fa fa-long-arrow-left"></span> Back to list</a>
+        <a class="card-link ml-auto" asp-action="Create" asp-controller="Advertisement">Advertise for Applicant<span class="fa fa-long-arrow-right"></span></a>
+    </div>
+</div>
+
+
+
+@section scripts{
+    <environment include="Development">
+
+        <script>
+            $(document).ready(() => {
+                $("button.course").click(function () {
+                    console.log('ok')
+                    var id = $(this).data("course-pk");
+                    $("#course-" + id).toggle();
+                    $(this).find("span").toggleClass("fa-plus-square fa-minus-square");
+                });
+            });
+        </script>
+    </environment>
+}
+@section styles{
+    <environment include="Development">
+
+        <link href="~/libs/font/css/font-awesome.css" rel="stylesheet" />
+
+
+    </environment>
+}
+

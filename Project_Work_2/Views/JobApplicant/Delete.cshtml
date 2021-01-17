@@ -1,0 +1,48 @@
+﻿@model Project_Work_2.Models.JobApplicant
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="card-body" style="background-color:lightcyan">
+
+    <h4 class="card-title" style="text-align:center">Delete Job Applicant Info</h4>
+
+    <div class="row">
+        <div class="col-2 text-right">
+            Applicant Name 
+        </div>
+        <div>
+            @Model.JobApplicantName
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-2 text-right">
+            Contact Email
+        </div>
+        <div>
+            @Model.ContactEmail
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2 text-right">
+           Job Advertisement
+        </div>
+        <div>
+            @Model.JobAdvertisementId
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4 offset-3">
+            @using (Html.BeginForm())
+            {
+                @Html.HiddenFor(x => x.JobApplicantId)
+                <input type="submit" value="Confirm" class="btn btn-danger btn-sm" />
+            }
+        </div>
+
+    </div>
+    @Html.ActionLink("Back in Main Page", "Index")
+</div>
+

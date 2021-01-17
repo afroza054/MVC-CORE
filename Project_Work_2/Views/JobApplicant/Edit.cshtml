@@ -1,0 +1,58 @@
+﻿@model JobApplicant
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="row" style="background-color:lightcyan">
+    <div class="col-12">
+        <form asp-controller="JobApplicant" asp-action="Edit" method="post">
+            <input type="hidden" asp-for="JobApplicantId" />
+            <h3>Create Applicant</h3>
+            <div class="form-group row">
+                <label asp-for="JobApplicantName" class="col-form-label col-form-label-sm col-2"></label>
+                <div class="col-4">
+                    <input type="text" asp-for="JobApplicantName" class="form-control form-control-sm" />
+                    <span class="text-danger" asp-validation-for="JobApplicantName"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="ContactEmail" class="col-form-label col-form-label-sm col-2"></label>
+                <div class="col-4">
+                    <input type="email" asp-for="ContactEmail" class="form-control form-control-sm" />
+                    <span class="text-danger" asp-validation-for="ContactEmail"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(x => x.JobAdvertisementId, new { @class = "col-control-label col-2 text-right" })
+                <div class="col-4">
+                    @Html.DropDownListFor(x => x.JobAdvertisementId,
+                    new SelectList(ViewBag.advertises as IEnumerable<JobAdvertisement>, "JobAdvertisementId", "JobTypeName"),
+                     "--Select one--", new { @class = "form-control form-control-sm" })
+                    @Html.ValidationMessageFor(x => x.JobAdvertisementId, null, new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <div class="col-4 offset-2">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section styles {
+    <environment include="Development">
+
+
+    </environment>
+}
+@section scripts {
+    <environment include="Development">
+        <script src="~/libs/validate/jquery.validate.js"></script>
+        <script src="~/libs/validate/jquery.validate.unobtrusive.js"></script>
+    </environment>
+}
+

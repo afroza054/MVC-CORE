@@ -1,0 +1,44 @@
+﻿@model IEnumerable<JobAdvertisement>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Job Advertisement</h2>
+<div class="d-flex justify-content-end mb-1">
+    <a class="btn btn-success" asp-controller="JobAdvertisement" asp-action="Create"><i class="fa fa-plus">Create</i></a>
+</div>
+<table class="table table-bordered table-warning table-hover">
+    <thead class="thead-warning">
+        <tr>
+            <th>Job Advertisement ID</th>
+            <th>Job Type Name</th>
+            <th>Responsibility</th>
+            <th>Job Site Name</th>
+            <th>....</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var a in Model)
+        {
+        <tr>
+            <td>@a.JobAdvertisementId</td>
+            <td>@a.JobTypeName</td>
+            
+            <td>@a.Responsibility</td>
+            <td>@a.OnlineJobSite.OnlineJobSiteName</td>
+            <td>
+                <a asp-controller="JobAdvertisement" class="btn btn-warning" asp-action="Edit" asp-route-id="@a.JobAdvertisementId"><i class="fa fa-save">Edit</i></a>
+                <a asp-controller="JobAdvertisement" class="btn btn-danger" asp-action="Delete" asp-route-id="@a.JobAdvertisementId"><i class="fa fa-trash">Delete</i></a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+@section styles {
+
+
+    <link href="~/libs/font/css/font-awesome.css" rel="stylesheet" />
+
+}
+

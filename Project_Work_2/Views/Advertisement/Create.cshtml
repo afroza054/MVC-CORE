@@ -1,0 +1,223 @@
+﻿@model JobAdvertisement
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="card bg-light">
+    <div class="card-header bg-dark text-white">
+        <h4 class="card-title">Create Advertisement & Applicant</h4>
+    </div>
+    <div class="card-body">
+        <div class="card-text">
+            <h5 class="card-subtitle">Job Site and Advertisement</h5>
+            <form id="formCourse">
+                <div class="form-group row">
+                    <label asp-for="OnlineJobSiteId" class="col-form-label col-2 text-right"></label>
+                    <div class="col-4">
+                        <select class="form-control" asp-for="OnlineJobSiteId" asp-items="@(new SelectList(ViewBag.JobSites,"OnlineJobSiteId", "OnlineJobSiteName"))"></select>
+                        <span asp-validation-for="OnlineJobSiteId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="JobAdvertisementId" class="col-form-label col-2 text-right"></label>
+                    <div class="col-4">
+                        <select class="form-control" asp-for="JobAdvertisementId"></select>
+                        <span asp-validation-for="JobAdvertisementId" class="text-danger"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-text" id="part-students">
+            <h5 class="card-subtitle">Job Applicants</h5>
+            <form id="formStudents">
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Applicant Name</th>
+
+                            <th>Contact Email</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTbody"></tbody>
+                    <tfoot>
+                        @await Html.PartialAsync("_ApplicantAddRow", new JobApplicant { })
+                    </tfoot>
+                </table>
+            </form>
+            <div class="text-right">
+                <button type="button" class="btn btn-success" id="saveall">Save All</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+
+        <div class="d-flex">
+            <a class="card-link" asp-action="Index"><span class="fa fa-long-arrow-left"></span> Back to list</a>
+            @*<a class="card-link ml-auto" asp-action="CreateSingle">Create course <span class="fa fa-long-arrow-right"></span></a>*@
+        </div>
+
+    </div>
+</div>
+
+@section styles {
+
+    <environment include="Development">
+
+        <link href="~/libs/font/css/font-awesome.css" rel="stylesheet" />
+
+        <link href="~/libs/gijgo/combined/css/gijgo.css" rel="stylesheet" />
+
+        <link href="~/libs/Toast/toast.min.css" rel="stylesheet" />
+    </environment>
+}
+@section scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/libs/Toast/toast.min.js"></script>
+
+    <script src="~/libs/gijgo/combined/js/gijgo.js"></script>
+    <script>
+        var applicants = [];
+        $(document).ready(() => {
+            $("#part-students").hide();
+            var selectCourse = $("#JobAdvertisementId")
+            $("#JobAdvertisementId").attr("disabled", "disabled");
+
+            //$("#DOB").datepicker({
+            //    uiLibrary: 'bootstrap4',
+            //    format: 'yyyy-mm-dd'
+            //});
+            //$("#DOB").val('');
+
+            $("#OnlineJobSiteId").on("change", function () {
+
+                var jobsiteId = $(this).val();
+                if (jobsiteId != 0) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Advertisement/GetAdvertiseeOptions/" + jobsiteId,
+                        dataType: "json"
+                    }).done((r) => {
+                        console.log(r);
+                        selectCourse.empty();
+                        for (var i = 0; i < r.length; i++) {
+                            $(`<option value="${r[i].jobAdvertisementId}">${r[i].jobTypeName}</option>`)
+                                .appendTo(selectCourse);
+                        }
+                        selectCourse.removeAttr("disabled");
+                    })
+                        .fail((err) => {
+                            console.log(err);
+                        });
+
+                }
+                else {
+                    selectCourse.empty();
+                    selectCourse.attr("disabled", "disabled");
+                    $("#part-students").hide();
+                }
+            });
+            $("#JobAdvertisementId").on("change", function () {
+                //console.log('ok')
+                if ($("#JobAdvertisementId").val() == '0' || $("#OnlineJobSiteId").val() == '0') {
+                    $("#part-students").hide();
+                    return;
+                }
+
+                $("#part-students").show();
+            });
+            $('button.student-add').click(function () {
+                var valid = $("#formStudents").valid();
+                if (!valid) return;
+                applicants.push({
+                    JobAdvertisementId: $("#JobAdvertisementId").val(),
+                    JobApplicantName: $("#JobApplicantName").val(),
+                    
+                    ContactEmail: $("#ContactEmail").val()
+                });
+                console.log(applicants);
+                fillStudentsTable();
+                $("#formStudents").trigger('reset');
+                //$("#DOB").val('');
+            });
+
+            $("#saveall").click(function () {
+                if (applicants.length == 0) {
+                    $.toast({
+                        title: 'Error!',
+                        subtitle: 'Information missing.',
+                        content: 'No applicant added.',
+                        type: 'warning',
+                        delay: 3000,
+                        dismissible: true,
+
+                        // is stackable?
+                        stackable: true,
+                        position: 'top-center bottom-right'
+
+                    });
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/Advertisement/SaveApplicants",
+                    type: "josn",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(applicants),
+                }).done(function (r) {
+                    if (r.success == false) {
+                        $.toast({
+                            title: 'Error!',
+                            subtitle: 'Information missing.',
+                            content: 'No applicants added.',
+                            type: 'warning',
+                            delay: 3000,
+                            dismissible: true,
+
+                            // is stackable?
+                            stackable: true,
+                            position: 'top-center bottom-right'
+
+                        });
+                        return;
+                    }
+                    $.toast({
+                        title: 'Success!',
+                        subtitle: 'Saved',
+                        content: 'Data saved successfully.',
+                        type: 'success',
+                        delay: 3000,
+                        dismissible: true,
+
+                        // is stackable?
+                        stackable: true,
+                        position: 'top-right'
+
+                    });
+                    $("#formCourse").trigger('reset');
+                    applicants = [];
+                    fillStudentsTable();
+                    $("#part-students").hide();
+
+                    $("#JobAdvertisementId").attr("disabled", "disabled");
+                    $("#formStudents").trigger('reset');
+                    //$("#DOB").val('');
+                })
+            });
+        });
+        function fillStudentsTable() {
+            $("#studentTbody").empty();
+            for (var i = 0; i < applicants.length; i++) {
+                $(`<tr>
+                                        <td>${applicants[i].JobApplicantName}</td>
+                                        
+                                        <td>${applicants[i].ContactEmail}</td>
+                                        <td></td>
+                                    </tr>`)
+                    .appendTo($("#studentTbody"));
+            }
+        }
+    </script>
+}

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<OnlineJobSite>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Online Job Site</h2>
+<div class="d-flex justify-content-end mb-1">
+    <a class="btn btn-success" asp-controller="OnlineJobSite" asp-action="Create"><i class="fa fa-plus">Create</i></a>
+</div>
+<table class="table table-bordered table-success table-hover">
+    <thead class="thead-success">
+        <tr>
+            <th>Job Site ID</th>
+            <th>Name of JobSite</th>
+            <th>Started Journey</th>
+            <th>Website</th>
+
+            <th>....</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var o in Model)
+        {
+        <tr>
+            <td>@o.OnlineJobSiteId</td>
+            <td>@o.OnlineJobSiteName</td>
+            <td>@o.StartedJourney</td>
+            <td>@(o.Web? "Yes" : "No")</td>
+            <td>
+                <a asp-controller="OnlineJobSite" class="btn btn-warning" asp-action="Edit" asp-route-id="@o.OnlineJobSiteId"><i class="fa fa-save">Edit</i></a>
+                <a asp-controller="OnlineJobSite" class="btn btn-danger" asp-action="Delete" asp-route-id="@o.OnlineJobSiteId"><i class="fa fa-trash">Delete</i></a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+@section styles {
+
+
+    <link href="~/libs/font/css/font-awesome.css" rel="stylesheet" />
+
+}

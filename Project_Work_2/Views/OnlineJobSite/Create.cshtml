@@ -1,0 +1,63 @@
+﻿@model OnlineJobSite
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="row" style="background-color:lightgreen">
+    <div class="col-12">
+        <form asp-controller="OnlineJobSite" asp-action="Create" method="post">
+            <h3>Create Online Job Site</h3>
+            <div class="form-group row">
+                <label asp-for="OnlineJobSiteName" class="col-form-label col-form-label-sm col-2"></label>
+                <div class="col-4">
+                    <input type="text" asp-for="OnlineJobSiteName" class="form-control form-control-sm" />
+                    <span class="text-danger" asp-validation-for="OnlineJobSiteName"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="StartedJourney" class="col-form-label col-form-label-sm col-2"></label>
+                <div class="col-4">
+                    <input type="text" asp-for="StartedJourney" class="form-control form-control-sm" />
+                    <span class="text-danger" asp-validation-for="StartedJourney"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Web" class="col-form-label col-form-label-sm col-2"></label>
+                <div class="col-4">
+                    <input type="checkbox" asp-for="Web" class="form-control form-control-sm" />
+                    <span class="text-danger" asp-validation-for="Web"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <div class="col-4 offset-2">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section styles {
+    <environment include="Development">
+        <link href="~/libs/font/css/font-awesome.css" rel="stylesheet" />
+        <link href="~/libs/gijgo/combined/css/gijgo.css" rel="stylesheet" />
+
+    </environment>
+}
+@section scripts {
+    <environment include="Development">
+        <script src="~/libs/gijgo/combined/js/gijgo.js"></script>
+        <script src="~/libs/validate/jquery.validate.js"></script>
+        <script src="~/libs/validate/jquery.validate.unobtrusive.js"></script>
+        <script>
+            $('#StartedJourney').datepicker({
+                uiLibrary: 'bootstrap4',
+                format: "yyyy-mm-dd"
+            });
+        </script>
+
+    </environment>
+}
+

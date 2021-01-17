@@ -1,0 +1,83 @@
+﻿@model Project_Work_2.Models.JobAdvertisement
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="card rounded" style="background-color:lightcyan">
+    <div class="card-header bg-danger text-white">
+        <h4 class="card-title"><span class="fa fa-exclamation"></span>Want to Delete This?</h4>
+    </div>
+    <div class="card-body">
+        <h5 class="card-subtitle">Advertise</h5>
+        <hr />
+        <div class="card-text">
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.JobTypeName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.JobTypeName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Responsibility)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Responsibility)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.OnlineJobSite)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.OnlineJobSite.OnlineJobSiteName)
+                </dd>
+            </dl>
+
+        </div>
+        <h5 class="card-subtitle">Applicant</h5>
+        <hr />
+        <div class="card-text">
+            <table class="table table-bordered bg-light table-striped">
+                <thead>
+                    <tr>
+                        <th>Applicant Name</th>
+                        
+                        <th>Contact Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var s in Model.JobApplicants)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(x => s.JobApplicantName)</td>
+                            
+                            <td>@Html.DisplayFor(x => s.ContactEmail)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                <form asp-action="Delete" class="ml-auto mr-1">
+                    <input type="hidden" asp-for="JobAdvertisementId" />
+                    <input type="submit" value="Confirm Delete" class="btn btn-danger" />
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer bg-white">
+        <div class="d-flex">
+            <a asp-action="Index"><span class="fa fa-long-arrow-left"></span> Back to List</a>
+            <a asp-action="Edit" asp-route-id="@Model.JobAdvertisementId" class="ml-auto">Edit this item <span class="fa fa-long-arrow-right"></span></a>
+        </div>
+    </div>
+</div>
+
+@section styles {
+
+    <environment include="Development">
+       
+        <link href="~/libs/font/css/font-awesome.css" rel="stylesheet" />
+    </environment>
+}
+
+

@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div style="background-color:lightskyblue; text-align:center;">
+    
+    
+        <h5 class="display-2">Online Job Site</h5>
+        <p>
+            Online job site will help you to find out suitable job with in a moment.
+        </p>
+   
+
+    <div class="row">
+        <div class="card mr-2  mb-1  offset-2" style="min-width: 10rem;">
+            <div class="card-body">
+                <h4 class="card-title">Online Job Site</h4>
+                <div class="card-text">
+                    @Html.ActionLink("Table 1", "Index", "OnlineJobSite", new { }, new { @class = "btn btn-info" })
+                </div>
+            </div>
+        </div>
+        <div class="card mr-2  mb-1" style="min-width: 10rem;">
+            <div class="card-body">
+                <h4 class="card-title">Job Advertisement</h4>
+                <div class="card-text">
+                    @Html.ActionLink("Table 2", "Index", "JobAdvertisement", new { }, new { @class = "btn btn-success" })
+                </div>
+            </div>
+        </div>
+        <div class="card mr-2  mb-1" style="min-width: 10rem;">
+            <div class="card-body">
+                <h4 class="card-title">Job Applicant</h4>
+                <div class="card-text">
+                    @Html.ActionLink("Table 3", "Index", "JobApplicant", new { }, new { @class = "btn btn-warning" })
+                </div>
+            </div>
+        </div>
+        <div class="card mr-2  mb-1" style="min-width: 10rem;">
+            <div class="card-body">
+                <h4 class="card-title">Apply For A Online Job</h4>
+                <div class="card-text">
+                    <a href="https://www.youtube.com/watch?v=ZOdVNSh_9Mk">You Tube Video</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+

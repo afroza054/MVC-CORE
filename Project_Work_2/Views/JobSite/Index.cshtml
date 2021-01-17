@@ -1,0 +1,149 @@
+﻿@model IEnumerable<OnlineJobSite>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="card">
+  
+    <div class="card-body">
+        
+        <h4 class="card-title">JobSite & Advertisement & Applicant</h4>
+        @*<div class="d-flex justify-content-end mb-1">
+            @Html.ActionLink("Create Jobsite with Advertise", "CreateTradeWithCourse1", "JobSite", new { }, new { @class = "btn btn-primary" })
+
+        </div>*@
+
+    </div>
+</div>
+<div class="card-text">
+    <table class="table table-bordered table-success">
+        <thead class="thead-light">
+            <tr>
+                <th style="width:50px">
+                    <button type="button" class="btn btn-sm all"><span class="fa fa-plus"></span></button>
+                </th>
+                <th>Job Site ID</th>
+                <th>Job Site Name</th>
+                <th>Started Journey</th>
+                <th>Response Instantly</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="width:50px">
+                        <button type="button" class="btn btn-sm trade" data-trade-pk="@item.OnlineJobSiteId"><span class="fa fa-plus-square"></span></button>
+                    </td>
+                    <td>@item.OnlineJobSiteId</td>
+                    <td>@item.OnlineJobSiteName</td>
+                    <td>@item.StartedJourney.ToString("yyyy-MM-dd")</td>
+                    <td>@(item.Web ? "Yes" : "No")</td>
+                    @*<td>
+                        <a asp-action="EditWithCourse" asp-controller="JobSite" asp-route-id="@item.OnlineJobSiteId" class="btn btn-primary btn-sm rounded-circle"><span class="fa fa-pencil"></span></a>
+                        <a asp-action="Delete" asp-controller="JobSite" class="btn btn-danger btn-sm rounded-circle"><span class="fa fa-trash"></span></a>
+                    </td>*@
+                </tr>
+                <tr style="display: none" id="trade-@item.OnlineJobSiteId" class="child-row">
+                    <td></td>
+                    <td colspan="4">
+                        <table class="table table-bordered table-warning">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th style="width:50px">
+
+                                    </th>
+                                    <th>Job Type</th>
+                                    <th>Responsibility</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var child in item.JobAdvertisements)
+                                {
+                                    <tr>
+                                        <td>
+                                            <button type="button" class="btn btn-sm course" data-course-pk="@child.JobAdvertisementId"><span class="fa fa-plus-square"></span></button>
+                                        </td>
+                                        <td>@child.JobTypeName</td>
+                                        <td>@child.Responsibility</td>
+
+                                    </tr>
+                                    <tr style="display:none;" id="course-@child.JobAdvertisementId" class="child-row">
+                                        <td>&nbsp;</td>
+                                        <td colspan="2">
+                                            <table class="table table-bordered table-primary">
+                                                <thead class="thead-light">
+                                                    <tr>
+
+                                                        <th>Applicant name</th>
+                                                        <th>Contact Email</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var grand in child.JobApplicants)
+                                                    {
+                                                        <tr>
+
+                                                            <td>@grand.JobApplicantName</td>
+                                                            <td><a href="mailto:@grand.ContactEmail">@grand.ContactEmail</a></td>
+                                                            @*<td>@(grand.Experience ? "Yes" : "No")</td>*@
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+
+
+
+@section styles{
+    <environment include="Development">
+
+        <link href="~/libs/font/css/font-awesome.css" rel="stylesheet" />
+        <script>
+            $(document).ready(() => {
+                $("button.trade").click(function () {
+                    var id = $(this).data("trade-pk");
+                    $("#trade-" + id).toggle();
+                    $(this).find("span").toggleClass("fa-plus-square fa-minus-square");
+                });
+                $("button.course").click(function () {
+                    var id = $(this).data("course-pk");
+                    $("#course-" + id).toggle();
+                    $(this).find("span").toggleClass("fa-plus-square fa-minus-square");
+                });
+                $("button.all").click(function () {
+                    if ($(this).find("span").hasClass("fa-plus")) {
+                        $("tr.child-row").show();
+                        $("button.course span")
+                            .removeClass("fa-plus-square")
+                            .addClass("fa-minus-square");
+                        $("button.trade span")
+                            .removeClass("fa-plus-square")
+                            .addClass("fa-minus-square");
+                    }
+                    else {
+                        $("tr.child-row").hide();
+                        $("button.course span").removeClass("fa-minus-square").addClass("fa-plus-square");
+                        $("button.trade span").removeClass("fa-minus-square").addClass("fa-plus-square");
+                    }
+                    $(this).find("span").toggleClass("fa-plus fa-minus");
+                })
+            })
+        </script>
+    </environment>
+}
+
